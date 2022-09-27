@@ -14,35 +14,67 @@ ui <- fluidPage(
     tabPanel(
       "salmon",
       fluidRow(
-  
-  # Sidebar layout with input and output definitions ----
-  sidebarLayout(
-    
-    # Sidebar to demonstrate various slider options ----
-    sidebarPanel(
-      
-      # Input: Simple integer interval ----
-      numericInput("length_cm", "Length (cm):",
-                  min = 0, max = 200,
-                  value = 0),
-      
-      # Input: Decimal interval with step value ----
-      numericInput("girth_cm", "Girth (cm):",
-                   min = 0, max = 150,
-                   value = 0)
-      
+        
+        # Sidebar layout with input and output definitions ----
+        sidebarLayout(
+          
+          # Sidebar to demonstrate various slider options ----
+          sidebarPanel(
+            
+            # Input: Simple integer interval ----
+            numericInput("length_cm_s", "Length (cm):",
+                         min = 0, max = 200,
+                         value = 0),
+            
+            # Input: Decimal interval with step value ----
+            numericInput("girth_cm_s", "Girth (cm):",
+                         min = 0, max = 150,
+                         value = 0)
+            
+          ),
+          
+          # Main panel for displaying outputs ----
+          mainPanel(
+            
+            # Output: Table summarizing the values entered ----
+            tableOutput("values")
+            
+          )
+        )
+      )
     ),
-    
-    # Main panel for displaying outputs ----
-    mainPanel(
-      
-      # Output: Table summarizing the values entered ----
-      tableOutput("values")
-      
+    tabPanel(
+      "sea trout",
+      fluidRow(
+        
+        # Sidebar layout with input and output definitions ----
+        sidebarLayout(
+          
+          # Sidebar to demonstrate various slider options ----
+          sidebarPanel(
+            
+            # Input: Simple integer interval ----
+            numericInput("length_cm_st", "Length (cm):",
+                         min = 0, max = 200,
+                         value = 0),
+            
+            # Input: Decimal interval with step value ----
+            numericInput("girth_cm_st", "Girth (cm):",
+                         min = 0, max = 150,
+                         value = 0)
+            
+          ),
+          
+          # Main panel for displaying outputs ----
+          mainPanel(
+            
+            # Output: Table summarizing the values entered ----
+            tableOutput("values")
+            
+          )
+        )
+      )
     )
-  )
-)
-)
 )
 )
 

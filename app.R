@@ -1,4 +1,4 @@
-library(shiny)
+
 
 # Define UI for slider demo app ----
 ui <- fluidPage(
@@ -22,14 +22,14 @@ ui <- fluidPage(
           sidebarPanel(
             
             # Input: Simple integer interval ----
-            numericInput("length_cm_s", "Length (cm):",
+            numericInput("length_inch_s", "Length (inches):",
                          min = 0, max = 200,
-                         value = 0),
+                         value = NULL),
             
             # Input: Decimal interval with step value ----
-            numericInput("girth_cm_s", "Girth (cm):",
+            numericInput("girth_inch_s", "Girth (inches):",
                          min = 0, max = 150,
-                         value = 0)
+                         value = NULL)
             
           ),
           
@@ -37,7 +37,7 @@ ui <- fluidPage(
           mainPanel(
             
             # Output: Table summarizing the values entered ----
-            tableOutput("values")
+            tableOutput("values_s")
             
           )
         )
@@ -54,12 +54,12 @@ ui <- fluidPage(
           sidebarPanel(
             
             # Input: Simple integer interval ----
-            numericInput("length_cm_st", "Length (cm):",
+            numericInput("length_inch_st", "Length (inches):",
                          min = 0, max = 200,
                          value = 0),
             
             # Input: Decimal interval with step value ----
-            numericInput("girth_cm_st", "Girth (cm):",
+            numericInput("girth_inch_st", "Girth (inches):",
                          min = 0, max = 150,
                          value = 0)
             
@@ -69,7 +69,7 @@ ui <- fluidPage(
           mainPanel(
             
             # Output: Table summarizing the values entered ----
-            tableOutput("values")
+            tableOutput("values_st")
             
           )
         )
@@ -82,26 +82,38 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   # Reactive expression to create data frame of all input values ----
-  sliderValues <- reactive({
+  length_input <- reactive({input$length_inch_s})
+  girth_input <- reactive({input$girth_inch_s})
+  sliderValues_s <- reactive({
+    req(length_input())
+    #incorporate the Sturdy scale: https://www.richarddonkin.com/Archive/Source%20Material/Sturdy_Scale.pdf
+    length = as.numeric(length_input())
+    if(!isTruthy(girth_input())){
+      girth = length/1.965 # This is unproven but seems to be the approximate estimate used for girth. Need to check.
+    } else {
+      girth = girth_input()
+    }
+      
+    weight = ((length *1.33333) * (girth^2))/800
+    units = "lbs"
+    if(units == "lbs"){paste0(floor(weight), "lbs ", round((weight - trunc(weight))*16, digits = 0), "ozs" )}
     
-    data.frame(
-      Name = c("Integer",
-               "Decimal",
-               "Range",
-               "Custom Format",
-               "Animation"),
-      Value = as.character(c(input$integer,
-                             input$decimal,
-                             paste(input$range, collapse = " "),
-                             input$format,
-                             input$animation)),
-      stringsAsFactors = FALSE)
     
   })
   
+  sliderValues_st <- reactive({
+    
+    "in development"
+  })
+  
   # Show the values in an HTML table ----
-  output$values <- renderTable({
-    sliderValues()
+  output$values_s <- renderText({
+    paste0( "Sturdy scale  = ", sliderValues_s())
+  })
+  
+  # Show the values in an HTML table ----
+  output$values_st <- renderText({
+    sliderValues_st()
   })
   
 }
